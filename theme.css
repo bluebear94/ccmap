@@ -1,5 +1,6 @@
 table#locs {
   text-align: right;
+  clear: both;
 }
 
 table#locs td:nth-child(1) {
@@ -8,4 +9,12 @@ table#locs td:nth-child(1) {
 
 table#locs tr:nth-child(1) {
   text-align: left;
+}
+
+div#plot {
+  float: left;
+}
+
+div#screenshot {
+  float: left;
 }

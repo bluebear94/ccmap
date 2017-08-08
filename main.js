@@ -33,9 +33,10 @@ Plotly.d3.csv("ccservermap.csv", function(err, rows) {
   var names = unpack(rows, "Location");
   var markers = names.map((v, i) => 
     markerNames[i % markerNames.length]);
-  var namesAndCoordinates = rows.map(row =>
-    `${row.Location} (${row.x}, ${row.y}, ${row.z})`
-  );
+  var namesAndCoordinates = rows.map(row => {
+    var str = `<b>${row.Location}</b> (${row.x}, ${row.y}, ${row.z})`;
+    return str;
+  });
   var trace1 = {
     x: unpack(rows, "z"),
     y: unpack(rows, "x"),
@@ -48,11 +49,15 @@ Plotly.d3.csv("ccservermap.csv", function(err, rows) {
       color: unpack(rows, "y"),
       reversescale: true
     },
+    hoverlabel: {
+      bgcolor: 'rgb(155, 255, 190)'
+    },
     type: 'scatter3d',
     name: 'Locations',
     text: names,
     hovertext: namesAndCoordinates,
-    hoverinfo: "text"
+    hoverinfo: "text",
+    imagename: unpack(rows, "Screenshot")
   };
   var data = [trace1];
   /*
@@ -109,4 +114,20 @@ Plotly.d3.csv("ccservermap.csv", function(err, rows) {
     </tr>`
   ).join("");
   table.innerHTML += innerHTML;
+  var screenshot = document.getElementById("screenshot");
+  var plot = document.getElementById("plot");
+  plot.on("plotly_hover", function(data) {
+    //console.log(data);
+    var point = data.points[0];
+    var index = point.pointNumber;
+    var imagename = point.data.imagename[index];
+    var html = `<b>${escapeHtml(point.text)}</b>`;
+    html += ` (${escapeHtml(point.x)},`;
+    html += ` ${escapeHtml(point.y)},`;
+    html += ` ${escapeHtml(point.z)})`;
+    if (imagename)
+      html += `<br /><img src="screenshots/${imagename}.png">`;
+    else html += "<br /><i>(no screenshot)</i>";
+    screenshot.innerHTML = html;
+  })
 });
