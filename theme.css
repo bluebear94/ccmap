@@ -1,0 +1,11 @@
+table#locs {
+  text-align: right;
+}
+
+table#locs td:nth-child(1) {
+  text-align: left;
+}
+
+table#locs tr:nth-child(1) {
+  text-align: left;
+}
