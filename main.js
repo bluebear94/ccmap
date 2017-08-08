@@ -116,10 +116,12 @@ Plotly.d3.csv("ccservermap.csv", function(err, rows) {
   table.innerHTML += innerHTML;
   var screenshot = document.getElementById("screenshot");
   var plot = document.getElementById("plot");
+  var current = -1;
   plot.on("plotly_hover", function(data) {
     //console.log(data);
     var point = data.points[0];
     var index = point.pointNumber;
+    if (current == index) return;
     var imagename = point.data.imagename[index];
     var html = `<b>${escapeHtml(point.text)}</b>`;
     html += ` (${escapeHtml(point.x)},`;
@@ -129,5 +131,6 @@ Plotly.d3.csv("ccservermap.csv", function(err, rows) {
       html += `<br /><img src="screenshots/${imagename}.png">`;
     else html += "<br /><i>(no screenshot)</i>";
     screenshot.innerHTML = html;
+    current = index;
   })
 });
